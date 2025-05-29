@@ -6,5 +6,5 @@ Simple cli tools for obsidian vault backup
 <br><b>source .venv/bin/activate</b>
 <br><b>pip install -r requirements.txt</b>
 
-Run: <b>python3 run.py</b>
+Run: <b>python3 run_backup.py</b>
 
