@@ -3,7 +3,7 @@ from datetime import datetime
 import zipfile
 from dotenv import load_dotenv
 
-load_dotenv()
+load_dotenv(".env")
 
 vault_path  = os.getenv('VAULT_PATH')
 backup_dir = os.getenv('BACKUP_DIR')
