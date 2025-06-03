@@ -17,11 +17,11 @@ def backup_obsidian_vault():
     backup_path = os.path.join(backup_dir, backup_filename)
 
     with zipfile.ZipFile(backup_path, 'w', zipfile.ZIP_DEFLATED) as backup_zip:
-        for foldername, subfolders, filenames in os.walk(vault_path):
+        for folder_name, subfolders, filenames in os.walk(vault_path):
             for filename in filenames:
-                file_path = os.path.join(foldername, filename)
-                arcname = os.path.relpath(file_path, vault_path)
-                backup_zip.write(file_path, arcname)
+                file_path = os.path.join(folder_name, filename)
+                archive_name = os.path.relpath(file_path, vault_path)
+                backup_zip.write(file_path, archive_name)
     print(f'New backup is created at: {backup_path}')
 
 if __name__ == '__main__':
