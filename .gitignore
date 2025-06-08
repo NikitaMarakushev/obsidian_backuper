@@ -5,3 +5,18 @@
 /myenv/
 
 DRAFT.MD
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+
+# Logs
+*.log
+*.enc
+
+# Temporary files
+*.tar.gz
+tmp/

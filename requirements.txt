@@ -1,3 +1,0 @@
-python-dotenv==1.0.1
-yadisk==3.3.0
-cryptography==45.0.3
