@@ -2,6 +2,7 @@ import os
 from datetime import datetime
 import zipfile
 from dotenv import load_dotenv
+from cryptography.fernet import Fernet
 
 load_dotenv(".env")
 
@@ -23,6 +24,15 @@ def backup_obsidian_vault():
                 archive_name = os.path.relpath(file_path, vault_path)
                 backup_zip.write(file_path, archive_name)
     print(f'New backup is created at: {backup_path}')
+
+def encrypt_file(key: bytes, input_path: Path, output_path: Path):
+    fernet = Fernet(key)
+    with open(input_path, 'rb') as f:
+        encrypted = fernet.encrypt(f.read())
+    output_path.write_bytes(encrypted)
+
+def validate_vault_path(path: Path) -> bool:
+    return path.exists() and (path / '.obsidian').is_dir()
 
 if __name__ == '__main__':
     backup_obsidian_vault()
