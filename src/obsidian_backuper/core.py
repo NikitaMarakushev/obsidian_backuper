@@ -1,20 +1,23 @@
 import os
+import shutil
 import tarfile
 import tempfile
+import logging
 from datetime import datetime
 from typing import Optional
 from .exceptions import (
     VaultValidationError,
     EncryptionError,
-    ArchiveError, ObsidianBackupError
+    ArchiveError,
+    ObsidianBackupError
 )
 from .crypto import CryptoVault
 
+logger = logging.getLogger(__name__)
 
 class ObsidianBackuper:
-    def __init__(self, vault_path: str, remote_url: Optional[str] = None):
+    def __init__(self, vault_path: str):
         self.vault_path = self._validate_vault_path(vault_path)
-        self.remote_url = remote_url
 
     def _validate_vault_path(self, path: str) -> str:
         expanded_path = os.path.expanduser(path)
@@ -28,13 +31,21 @@ class ObsidianBackuper:
         try:
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
             backup_name = f"obsidian_backup_{timestamp}.tar.gz"
+            final_path = os.path.join(os.getcwd(), backup_name)
 
-            with tempfile.TemporaryDirectory() as tmpdir:
+            if os.path.exists(final_path):
+                raise ArchiveError(f"Backup file already exists: {final_path}")
+
+            logger.info(f"Starting backup for vault: {self.vault_path}")
+
+            with tempfile.TemporaryDirectory(dir=os.getcwd()) as tmpdir:
                 backup_path = os.path.join(tmpdir, backup_name)
+                logger.debug(f"Using temp dir: {tmpdir}")
 
                 try:
                     with tarfile.open(backup_path, "w:gz") as tar:
                         tar.add(self.vault_path, arcname=os.path.basename(self.vault_path))
+                    logger.debug(f"Temporary archive created: {backup_path}")
                 except (tarfile.TarError, OSError) as e:
                     raise ArchiveError(f"Archive creation failed: {str(e)}")
 
@@ -46,15 +57,18 @@ class ObsidianBackuper:
                         encrypted_path = backup_path + ".enc"
                         crypto.encrypt_file(backup_path, encrypted_path)
                         backup_path = encrypted_path
+                        final_path += ".enc"
+                        logger.debug(f"File encrypted: {backup_path}")
                     except Exception as e:
                         raise EncryptionError(f"Encryption failed: {str(e)}")
 
-                final_path = os.path.join(os.getcwd(), os.path.basename(backup_path))
-                os.replace(backup_path, final_path)
+                shutil.copy2(backup_path, final_path)
+                logger.info(f"Backup successfully created at: {final_path}")
 
             return final_path
 
         except Exception as e:
+            logger.error(f"Backup failed: {str(e)}")
             if isinstance(e, ObsidianBackupError):
                 raise
             raise ArchiveError(f"Unexpected backup error: {str(e)}")

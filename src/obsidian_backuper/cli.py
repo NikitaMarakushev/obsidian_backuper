@@ -35,7 +35,6 @@ def main():
 
     parser = argparse.ArgumentParser()
     parser.add_argument("--vault", default=get_env_var("VAULT_PATH", "~/obsidian"))
-    parser.add_argument("--remote", default=get_env_var("REMOTE_URL"))
     parser.add_argument("--encrypt", action="store_true")
     parser.add_argument("--password", default=get_env_var("BACKUP_PASSWORD"))
 
@@ -44,7 +43,6 @@ def main():
     try:
         backuper = ObsidianBackuper(
             vault_path=args.vault,
-            remote_url=args.remote
         )
 
         backup_path = backuper.create_backup(
