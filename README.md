@@ -46,7 +46,3 @@ CryptoVault('secret').decrypt_file('backup.enc', 'decrypted.tar.gz', 'secret')
 
 ### Cli run:
 ```obsidian-backup --vault ~/my_vault --encrypt --password "secret"```
-
-```obsidian-backup --vault ~/my_vault --remote git@github.com:user/repo.git```
-
-

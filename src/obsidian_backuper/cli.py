@@ -6,7 +6,6 @@ from typing import Optional
 from .core import ObsidianBackuper
 from .exceptions import (
     ObsidianBackupError,
-    GitOperationError,
     VaultValidationError,
     EncryptionError
 )
@@ -24,7 +23,6 @@ def setup_logging():
 
 
 def get_env_var(name: str, default: Optional[str] = None) -> Optional[str]:
-    """Безопасное получение переменных окружения"""
     value = os.getenv(name, default)
     if value is None:
         logging.warning(f"Environment variable {name} not set")
@@ -55,20 +53,11 @@ def main():
         )
         logging.info(f"Backup created: {backup_path}")
 
-        if backuper.remote_url:
-            backuper.push_to_remote()
-            logging.info("Changes pushed to remote repository")
-
     except VaultValidationError as e:
         logging.error(f"Vault error: {str(e)}")
         exit(1)
     except EncryptionError as e:
         logging.error(f"Encryption error: {str(e)}")
-        exit(1)
-    except GitOperationError as e:
-        logging.error(f"Git error: {str(e)}")
-        if e.git_error:
-            logging.debug(f"Git details: {str(e.git_error)}")
         exit(1)
     except ObsidianBackupError as e:
         logging.error(f"Backup error: {str(e)}")
