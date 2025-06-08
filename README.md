@@ -4,25 +4,9 @@ Simple cli tool for obsidian vault backup
 
 ### Install
 1. `git clone https://github.com/NikitaMarakushev/obsidian_backuper`
-2. `pip install -e .`
 
-### Set up
-Создайте `.env` файл:
-<br>```VAULT_PATH=/your_obsidian_vault_path``` 
-<br>```BACKUP_DIR=/your_obsidian_backup_vault_path```
+### Set up your .env file
 
-### Create undecrypted vault
-```python -m obsidian_backuper.cli --vault ~/my_vault```
-
-### Create encrypted vault
-```python -m obsidian_backuper.cli --vault ~/my_vault --encrypt --password "secret"```
-
-### Decrypt
-```python -c "
-from obsidian_backuper.crypto import CryptoVault
-CryptoVault('secret').decrypt_file('backup.enc', 'decrypted.tar.gz', 'secret')
-"
-```
 ### Run tests:
 ```pytest tests/ -v```
 
@@ -31,6 +15,12 @@ CryptoVault('secret').decrypt_file('backup.enc', 'decrypted.tar.gz', 'secret')
 
 ### Generate htlm template
 ```pytest --cov=src/obsidian_backuper --cov-report=html```
+
+### Create venv
+```python3 -m venv .venv```
+
+### Link venv
+```source .venv/bin/activate```
 
 ### Install test dependencies:
 ```pip install -e .[test]```
@@ -44,9 +34,10 @@ CryptoVault('secret').decrypt_file('backup.enc', 'decrypted.tar.gz', 'secret')
 ### Install:
 ```pip install dist/obsidian_backuper-1.0.0-py3-none-any.whl```
 
-### Cli run:
+### Cli run encrypt:
 ```obsidian-backup --vault ~/my_vault --encrypt --password "secret"```
 
-```obsidian-backup --vault ~/my_vault --remote git@github.com:user/repo.git```
+### Cli run decrypt:
 
-
+### Uninstall:
+```pip uninstall obsidian_backup```

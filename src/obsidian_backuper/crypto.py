@@ -4,7 +4,6 @@ from cryptography.fernet import Fernet, InvalidToken
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.backends import default_backend
-from typing import Tuple
 from .exceptions import EncryptionError
 
 
@@ -16,7 +15,6 @@ class CryptoVault:
         self.key = self._derive_key(password)
 
     def _derive_key(self, password: str) -> bytes:
-        """Генерация ключа с обработкой ошибок"""
         try:
             kdf = PBKDF2HMAC(
                 algorithm=hashes.SHA256(),
@@ -30,7 +28,6 @@ class CryptoVault:
             raise EncryptionError(f"Key derivation failed: {str(e)}")
 
     def encrypt_file(self, input_path: str, output_path: str):
-        """Шифрование с валидацией файлов"""
         try:
             if not os.path.exists(input_path):
                 raise EncryptionError(f"Input file not found: {input_path}")
@@ -48,7 +45,6 @@ class CryptoVault:
             raise EncryptionError(f"Encryption failed: {str(e)}")
 
     def decrypt_file(self, input_path: str, output_path: str, password: str):
-        """Дешифрование с проверкой пароля"""
         try:
             if not os.path.exists(input_path):
                 raise EncryptionError(f"Encrypted file not found: {input_path}")
@@ -57,7 +53,6 @@ class CryptoVault:
                 salt = f.read(16)
                 encrypted = f.read()
 
-            # Пересоздаём ключ с переданным паролем
             self.salt = salt
             self.key = self._derive_key(password)
 
