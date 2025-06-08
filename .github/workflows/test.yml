@@ -9,4 +9,5 @@ jobs:
         with:
           python-version: "3.12"
       - run: pip install -e .
+      - run: pip install -e .[test]
       - run: python -m pytest tests/
