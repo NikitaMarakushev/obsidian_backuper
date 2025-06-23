@@ -10,7 +10,6 @@ from .exceptions import (
     EncryptionError
 )
 
-
 def setup_logging():
     logging.basicConfig(
         level=logging.INFO,
@@ -21,13 +20,11 @@ def setup_logging():
         ]
     )
 
-
 def get_env_var(name: str, default: Optional[str] = None) -> Optional[str]:
     value = os.getenv(name, default)
     if value is None:
         logging.warning(f"Environment variable {name} not set")
     return value
-
 
 def main():
     setup_logging()
@@ -35,7 +32,8 @@ def main():
 
     parser = argparse.ArgumentParser()
     parser.add_argument("--vault", default=get_env_var("VAULT_PATH", "~/obsidian"))
-    parser.add_argument("--encrypt", action="store_true")
+    parser.add_argument("--encrypt", action="store_true", help="Run vault encryption")
+    parser.add_argument("--decrypt", action="store_true", help="Run vault decryption")
     parser.add_argument("--password", default=get_env_var("BACKUP_PASSWORD"))
 
     args = parser.parse_args()
@@ -45,11 +43,19 @@ def main():
             vault_path=args.vault,
         )
 
-        backup_path = backuper.create_backup(
-            encrypt=args.encrypt,
-            password=args.password
-        )
-        logging.info(f"Backup created: {backup_path}")
+        if args.encrypt:
+            backup_path = backuper.create_backup(
+                encrypt=args.encrypt,
+                password=args.password
+            )
+            logging.info(f"Backup created: {backup_path}")
+        
+        if args.decrypt:
+            backup_path = backuper.decrypt_backup(
+                encrypt=args.decrypt,
+                password=args.password
+            )
+            logging.info(f"Backup created: {backup_path}")
 
     except VaultValidationError as e:
         logging.error(f"Vault error: {str(e)}")
@@ -63,7 +69,6 @@ def main():
     except Exception as e:
         logging.error(f"Unexpected error: {str(e)}", exc_info=True)
         exit(1)
-
 
 if __name__ == "__main__":
     main()
