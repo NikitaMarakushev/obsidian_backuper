@@ -6,7 +6,6 @@ from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.backends import default_backend
 from .exceptions import EncryptionError
 
-
 class CryptoVault:
     def __init__(self, password: str, salt: bytes = None):
         if not password:
@@ -45,7 +44,7 @@ class CryptoVault:
             raise EncryptionError(f"Encryption failed: {str(e)}")
 
     
-    def decrypt_file(self, input_path: str, output_path: str):
+    def decrypt_file(self, input_path: str, output_path: str, password: Optional[str] = None):
         try:
             if not os.path.exists(input_path):
                 raise EncryptionError(f"Encrypted file not found: {input_path}")
@@ -53,6 +52,9 @@ class CryptoVault:
             with open(input_path, 'rb') as f:
                 salt = f.read(16)
                 encrypted = f.read()
+
+            if password is None:
+                raise EncryptionError("Password required for decryption")
 
             self.salt = salt
             self.key = self._derive_key(password)

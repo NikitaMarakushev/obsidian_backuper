@@ -31,14 +31,15 @@ class ObsidianBackuper:
         try:
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
             backup_name = f"obsidian_backup_{timestamp}.tar.gz"
-            final_path = os.path.join(os.getcwd(), backup_name)
+            vault_dir = os.path.dirname(os.path.abspath(self.vault_path))
+            final_path = os.path.join(vault_dir, backup_name)
 
             if os.path.exists(final_path):
                 raise ArchiveError(f"Backup file already exists: {final_path}")
 
             logger.info(f"Starting backup for vault: {self.vault_path}")
 
-            with tempfile.TemporaryDirectory(dir=os.getcwd()) as tmpdir:
+            with tempfile.TemporaryDirectory(dir=vault_dir) as tmpdir:
                 backup_path = os.path.join(tmpdir, backup_name)
                 logger.debug(f"Using temp dir: {tmpdir}")
 
@@ -72,32 +73,34 @@ class ObsidianBackuper:
             if isinstance(e, ObsidianBackupError):
                 raise
             raise ArchiveError(f"Unexpected backup error: {str(e)}")
-        
-    def decrypt_backup(self, decrypt: bool = False, password: Optional[str] = None) -> str:
+
+    def decrypt_backup(self, output_dir: str = None, password: Optional[str] = None) -> str:
         try:
-            if not os.path.exists(self.vault_path) or self.vault_path == '':
-                raise ArchiveError(f"Backup file does not exists: {self.vault_path}")
+            if not os.path.exists(self.vault_path):
+                raise ArchiveError(f"Backup file not found: {self.vault_path}")
 
-            if decrypt:
-                if not password:
-                    raise EncryptionError("Encryption password required")
-                try:
-                    crypto = CryptoVault(password)
-                    decrypted_path = ""
-                    final_path = ""
-                    crypto.decrypt_file(self.vault_path, decrypted_path)
-                    logger.debug(f"File decrypted: {self.vault_path}")
-                except Exception as e:
-                    raise EncryptionError(f"Decryption failed: {str(e)}")
+            logger.info(f"Starting decryption of: {self.vault_path}")
 
-            shutil.copy2(decrypted_path, final_path)
-            logger.info(f"Backup successfully created at: {final_path}")
+            if output_dir is None:
+                output_dir = os.path.dirname(os.path.abspath(self.vault_path))
 
-            return decrypted_path
+            decrypted_name = os.path.basename(self.vault_path).replace('.enc', '')
+            temp_path = os.path.join(output_dir, f"tmp_{decrypted_name}")
+            final_path = os.path.join(output_dir, decrypted_name)
+
+            if not password:
+                raise EncryptionError("Password required for decryption")
+
+            crypto = CryptoVault(password)
+            crypto.decrypt_file(self.vault_path, temp_path)
+            logger.debug(f"File decrypted to temporary: {temp_path}")
+
+            shutil.move(temp_path, final_path)
+            logger.info(f"Backup decrypted to: {final_path}")
+            return final_path
 
         except Exception as e:
-            logger.error(f"Backup decryption failed: {str(e)}")
+            logger.error(f"Decryption failed: {str(e)}")
             if isinstance(e, ObsidianBackupError):
                 raise
-            raise ArchiveError(f"Unexpected backup decryption error: {str(e)}")
-        
+            raise ArchiveError(f"Unexpected error: {str(e)}")
