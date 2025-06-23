@@ -83,11 +83,15 @@ class ObsidianBackuper:
                     raise EncryptionError("Encryption password required")
                 try:
                     crypto = CryptoVault(password)
-                    decrypted_path = ''
+                    decrypted_path = ""
+                    final_path = ""
                     crypto.decrypt_file(self.vault_path, decrypted_path)
                     logger.debug(f"File decrypted: {self.vault_path}")
                 except Exception as e:
                     raise EncryptionError(f"Decryption failed: {str(e)}")
+
+            shutil.copy2(decrypted_path, final_path)
+            logger.info(f"Backup successfully created at: {final_path}")
 
             return decrypted_path
 
