@@ -55,7 +55,7 @@ def main():
                 encrypt=args.decrypt,
                 password=args.password
             )
-            logging.info(f"Backup created: {backup_path}")
+            logging.info(f"Backup decrypted: {backup_path}")
 
     except VaultValidationError as e:
         logging.error(f"Vault error: {str(e)}")
