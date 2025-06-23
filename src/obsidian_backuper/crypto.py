@@ -44,6 +44,7 @@ class CryptoVault:
         except (IOError, InvalidToken) as e:
             raise EncryptionError(f"Encryption failed: {str(e)}")
 
+    
     def decrypt_file(self, input_path: str, output_path: str):
         try:
             if not os.path.exists(input_path):
