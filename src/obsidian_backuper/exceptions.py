@@ -12,3 +12,6 @@ class ArchiveError(ObsidianBackupError):
 
 class ConfigError(ObsidianBackupError):
     pass
+
+class DecryptionError(ObsidianBackupError):
+    pass

@@ -72,3 +72,27 @@ class ObsidianBackuper:
             if isinstance(e, ObsidianBackupError):
                 raise
             raise ArchiveError(f"Unexpected backup error: {str(e)}")
+        
+    def decrypt_backup(self, decrypt: bool = False, backup_path:  Optional[str] = None, password: Optional[str] = None) -> str:
+        try:
+            if not os.path.exists(backup_path) or backup_path == '':
+                raise ArchiveError(f"Backup file does not exists: {backup_path}")
+
+            if decrypt:
+                if not password:
+                    raise EncryptionError("Encryption password required")
+                try:
+                    crypto = CryptoVault(password)
+                    crypto.decrypt_file(backup_path, password)
+                    logger.debug(f"File encrypted: {backup_path}")
+                except Exception as e:
+                    raise EncryptionError(f"Encryption failed: {str(e)}")
+
+            return final_path
+
+        except Exception as e:
+            logger.error(f"Backup decryption failed: {str(e)}")
+            if isinstance(e, ObsidianBackupError):
+                raise
+            raise ArchiveError(f"Unexpected backup decryption error: {str(e)}")
+        
