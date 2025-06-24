@@ -31,31 +31,41 @@ def main():
     dotenv.load_dotenv()
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("--vault", default=get_env_var("VAULT_PATH", "~/obsidian"))
-    parser.add_argument("--encrypt", action="store_true", help="Run vault encryption")
-    parser.add_argument("--decrypt", action="store_true", help="Run vault decryption")
-    parser.add_argument("--password", default=get_env_var("BACKUP_PASSWORD"))
+    parser.add_argument("--vault", required=True, help="Path to vault directory (for encrypt) or to encrypted archive (for decrypt)")
+    parser.add_argument("--password", required=True, help="Encryption/decryption password")
+
+    group = parser.add_mutually_exclusive_group(required=True)
+    group.add_argument("--encrypt", action="store_true", help="Create and encrypt backup")
+    group.add_argument("--decrypt", action="store_true", help="Decrypt backup archive")
 
     args = parser.parse_args()
 
     try:
-        backuper = ObsidianBackuper(
-            vault_path=args.vault,
-        )
-
         if args.encrypt:
+            if not os.path.isdir(os.path.expanduser(args.vault)):
+                logging.error(f"Vault path must be a directory for encryption: {args.vault}")
+                exit(1)
+
+            backuper = ObsidianBackuper(vault_path=args.vault)
             backup_path = backuper.create_backup(
-                encrypt=args.encrypt,
+                encrypt=True,
                 password=args.password
             )
-            logging.info(f"Backup created: {backup_path}")
-        
-        if args.decrypt:
-            backup_path = backuper.decrypt_backup(
-                encrypt=args.decrypt,
+            logging.info(f"Encrypted backup created at: {backup_path}")
+
+        elif args.decrypt:
+            vault_path_expanded = os.path.expanduser(args.vault)
+            if not os.path.isfile(vault_path_expanded):
+                logging.error(f"Encrypted backup file not found: {vault_path_expanded}")
+                exit(1)
+
+            backuper = ObsidianBackuper.__new__(ObsidianBackuper)
+            backuper.vault_path = vault_path_expanded
+
+            decrypted_path = backuper.decrypt_backup(
                 password=args.password
             )
-            logging.info(f"Backup decrypted: {backup_path}")
+            logging.info(f"Backup decrypted at: {decrypted_path}")
 
     except VaultValidationError as e:
         logging.error(f"Vault error: {str(e)}")

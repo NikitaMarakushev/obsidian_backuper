@@ -32,12 +32,13 @@ Simple cli tool for obsidian vault backup
 ```python -m build```
 
 ### Install:
-```pip install dist/obsidian_backuper-1.0.1-py3-none-any.whl```
+```pip install dist/obsidian_backuper-1.0.2-py3-none-any.whl```
 
 ### Cli run encrypt:
 ```obsidian-backup --vault ~/my_vault --encrypt --password "secret"```
 
 ### Cli run decrypt:
+```obsidian-backup --vault ~/path_to_folder_with_vault --decrypt --password "secret"```
 
 ### Uninstall:
 ```pip uninstall obsidian_backup```
