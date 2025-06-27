@@ -7,6 +7,9 @@ from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.backends import default_backend
 from .exceptions import EncryptionError
 
+LENGTH = 32
+ITERATIONS = 480000
+
 class CryptoVault:
     def __init__(self, password: str, salt: bytes = None):
         if not password:
@@ -18,9 +21,9 @@ class CryptoVault:
         try:
             kdf = PBKDF2HMAC(
                 algorithm=hashes.SHA256(),
-                length=32,
+                length=LENGTH,
                 salt=self.salt,
-                iterations=480000,
+                iterations=ITERATIONS,
                 backend=default_backend()
             )
             return base64.urlsafe_b64encode(kdf.derive(password.encode()))
