@@ -20,13 +20,16 @@ function main() {
 
     run_command \
       "pip install -e .[test]" \
-      "Installing dependencies from `pyproject.toml` succeed!" \
-      "Installing dependencies from `pyproject.toml` failed"
+      "Installing dependencies from pyproject.toml succeed!" \
+      "Installing dependencies from pyproject.toml failed"
 
     run_command \
       "pip install build" \
       "Installing build pip package succeed!" \
       "Installing build pip package failed"
+
+    print_header "SUCCESS!"
+    color_echo "python3 venv activated and necessary dependencies are installed!"
 }
 
 main
