@@ -10,12 +10,15 @@ from .exceptions import (
     EncryptionError
 )
 
+BACKUP_LOG_FILENAME = 'obsidian_backup.log'
+LOG_FORMAT = '%(asctime)s - %(levelname)s - %(message)s'
+
 def setup_logging():
     logging.basicConfig(
         level=logging.INFO,
-        format='%(asctime)s - %(levelname)s - %(message)s',
+        format=LOG_FORMAT,
         handlers=[
-            logging.FileHandler('obsidian_backup.log'),
+            logging.FileHandler(BACKUP_LOG_FILENAME),
             logging.StreamHandler()
         ]
     )
