@@ -3,10 +3,30 @@
 # Strict mode
 set -euo pipefail
 
-python3 -m venv .venv
+source ./bash_libs/log.sh
 
-source .venv/bin/activate
+function main() {
+    print_header "RUN INSTALL VENV"
 
-pip install -e .[test]
+    run_command \
+      "python3 -m venv .venv" \
+      "Creating python3 venv succeed!" \
+      "Creating python3 venv failed"
 
-pip install build
+    run_command \
+      "source .venv/bin/activate" \
+      "Python3 venv activation succeed!" \
+      "Python3 venv activation failed"
+
+    run_command \
+      "pip install -e .[test]" \
+      "Installing dependencies from `pyproject.toml` succeed!" \
+      "Installing dependencies from `pyproject.toml` failed"
+
+    run_command \
+      "pip install build" \
+      "Installing build pip package succeed!" \
+      "Installing build pip package failed"
+}
+
+main
