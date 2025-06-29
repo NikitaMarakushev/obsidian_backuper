@@ -48,3 +48,5 @@ Alternative:
 ```bash setup_venv.sh```
 2) Run to build:
 ```bash build_and_install.sh & source .venv/bin/activate```
+
+exit venv: ```deactivate```

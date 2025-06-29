@@ -9,7 +9,8 @@ from .exceptions import (
     VaultValidationError,
     EncryptionError,
     ArchiveError,
-    ObsidianBackupError
+    ObsidianBackupError,
+    DecryptionError
 )
 from .crypto import CryptoVault
 
@@ -127,6 +128,7 @@ class ObsidianDecryptor:
             decrypted_name = os.path.basename(self.encrypted_file_path).replace('.enc', '')
             final_path = os.path.join(output_dir, decrypted_name)
 
+            # Initialize CryptoVault with the provided password
             crypto = CryptoVault(password)
             crypto.decrypt_file(self.encrypted_file_path, final_path)
 
