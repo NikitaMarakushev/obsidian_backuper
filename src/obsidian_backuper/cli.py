@@ -10,15 +10,12 @@ from .exceptions import (
     EncryptionError
 )
 
-BACKUP_LOG_FILENAME = 'obsidian_backup.log'
-LOG_FORMAT = '%(asctime)s - %(levelname)s - %(message)s'
-
 def setup_logging():
     logging.basicConfig(
         level=logging.INFO,
-        format=LOG_FORMAT,
+        format='%(asctime)s - %(levelname)s - %(message)s',
         handlers=[
-            logging.FileHandler(BACKUP_LOG_FILENAME),
+            logging.FileHandler('obsidian_backup.log'),
             logging.StreamHandler()
         ]
     )
@@ -57,24 +54,18 @@ def main():
             logging.info(f"Encrypted backup created at: {backup_path}")
 
         elif args.decrypt:
-            vault_path_expanded = os.path.expanduser(args.vault)
-            if not os.path.isfile(vault_path_expanded):
-                logging.error(f"Encrypted backup file not found: {vault_path_expanded}")
-                exit(1)
-
-            backuper = ObsidianBackuper.__new__(ObsidianBackuper)
-            backuper.vault_path = vault_path_expanded
-
-            decrypted_path = backuper.decrypt_backup(
-                password=args.password
-            )
-            logging.info(f"Backup decrypted at: {decrypted_path}")
+            decryptor = ObsidianDecryptor(encrypted_file_path=args.vault)
+            decrypted_path = decryptor.decrypt(password=args.password)
+            logging.info(f"File decrypted to: {decrypted_path}")
 
     except VaultValidationError as e:
         logging.error(f"Vault error: {str(e)}")
         exit(1)
     except EncryptionError as e:
         logging.error(f"Encryption error: {str(e)}")
+        exit(1)
+    except DecryptionError as e:
+        logging.error(f"Decryption error: {str(e)}")
         exit(1)
     except ObsidianBackupError as e:
         logging.error(f"Backup error: {str(e)}")

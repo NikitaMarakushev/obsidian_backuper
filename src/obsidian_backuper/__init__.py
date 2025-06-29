@@ -3,4 +3,4 @@ from .cli import main
 from .exceptions import ObsidianBackupError
 
 __version__ = "1.0.2"
-__all__ = ["ObsidianBackuper", "main", "ObsidianBackupError"]
+__all__ = ["ObsidianBackuper", "ObsidianDecryptor", "main", "ObsidianBackupError", "DecryptionError"]
