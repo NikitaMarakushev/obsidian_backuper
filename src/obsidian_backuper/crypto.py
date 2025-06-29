@@ -14,6 +14,7 @@ class CryptoVault:
     def __init__(self, password: str, salt: bytes = None):
         if not password:
             raise EncryptionError("Password cannot be empty")
+        self.password = password
         self.salt = salt or os.urandom(16)
         self.key = self._derive_key(password)
 
@@ -57,7 +58,16 @@ class CryptoVault:
                 salt = f.read(16)
                 encrypted = f.read()
 
-            fernet = Fernet(self.key)
+            kdf = PBKDF2HMAC(
+                algorithm=hashes.SHA256(),
+                length=LENGTH,
+                salt=salt,  # Use the salt from the file
+                iterations=ITERATIONS,
+                backend=default_backend()
+            )
+
+            key = base64.urlsafe_b64encode(kdf.derive(self.password.encode()))
+            fernet = Fernet(key)
             decrypted = fernet.decrypt(encrypted)
 
             with open(output_path, 'wb') as f:

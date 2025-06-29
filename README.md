@@ -50,3 +50,5 @@ Alternative:
 ```bash build_and_install.sh & source .venv/bin/activate```
 
 exit venv: ```deactivate```
+
+Uninstall packege: ```pip uninstall obsidian-backuper```
