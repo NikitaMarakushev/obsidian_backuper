@@ -42,3 +42,9 @@ Simple cli tool for obsidian vault backup
 
 ### Uninstall:
 ```pip uninstall obsidian_backup```
+
+Alternative:
+1) Run to venv setup:
+```bash setup_venv.sh```
+2) Run to build:
+```bash build_and_install.sh & source .venv/bin/activate```

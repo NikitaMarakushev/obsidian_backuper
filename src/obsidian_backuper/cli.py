@@ -9,6 +9,7 @@ from .exceptions import (
     VaultValidationError,
     EncryptionError
 )
+from .core import ObsidianDecryptor
 
 def setup_logging():
     logging.basicConfig(

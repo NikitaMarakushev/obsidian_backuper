@@ -44,6 +44,10 @@ function main() {
 
     print_header "SUCCESS!"
     color_echo "$GREEN_COLOR_CODE" "Package has been built and installed"
+
+    echo -e "\nTo use obsidian-backup, run:"
+    echo "source .venv/bin/activate"
+    echo "obsidian-backup --help"
 }
 
 main
