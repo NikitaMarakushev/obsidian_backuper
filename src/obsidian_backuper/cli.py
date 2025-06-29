@@ -7,7 +7,8 @@ from .core import ObsidianBackuper
 from .exceptions import (
     ObsidianBackupError,
     VaultValidationError,
-    EncryptionError
+    EncryptionError,
+    DecryptionError
 )
 from .core import ObsidianDecryptor
 

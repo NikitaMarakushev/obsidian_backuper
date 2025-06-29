@@ -32,7 +32,7 @@ Simple cli tool for obsidian vault backup
 ```python -m build```
 
 ### Install:
-```pip install dist/obsidian_backuper-1.0.2-py3-none-any.whl```
+```pip install dist/obsidian_backuper-1.0.0-py3-none-any.whl```
 
 ### Cli run encrypt:
 ```obsidian-backup --vault ~/my_vault --encrypt --password "secret"```
@@ -48,3 +48,7 @@ Alternative:
 ```bash setup_venv.sh```
 2) Run to build:
 ```bash build_and_install.sh & source .venv/bin/activate```
+
+exit venv: ```deactivate```
+
+Uninstall packege: ```pip uninstall obsidian-backuper```
