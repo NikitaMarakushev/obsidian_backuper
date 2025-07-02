@@ -10,7 +10,7 @@ from .exceptions import (
     EncryptionError,
     DecryptionError
 )
-from .core import ObsidianDecryptor
+from .obsidian_decryptor import ObsidianDecryptor
 
 def setup_logging():
     logging.basicConfig(
