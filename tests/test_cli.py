@@ -1,6 +1,7 @@
 import unittest
 import os
 import tempfile
+import shutil
 from unittest.mock import patch, MagicMock
 from obsidian_backuper.cli import main, get_env_var
 from obsidian_backuper.exceptions import VaultValidationError, EncryptionError, DecryptionError
