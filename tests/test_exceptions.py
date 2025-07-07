@@ -1,5 +1,5 @@
 import unittest
-from obsidian_backup.exceptions import (
+from obsidian_backuper.exceptions import (
     ObsidianBackupError,
     VaultValidationError,
     EncryptionError,

@@ -1,8 +1,8 @@
 import unittest
 import os
 import tempfile
-from obsidian_backup.obsidian_decryptor import ObsidianDecryptor
-from obsidian_backup.exceptions import ArchiveError, DecryptionError
+from obsidian_backuper.obsidian_decryptor import ObsidianDecryptor
+from obsidian_backuper.exceptions import ArchiveError, DecryptionError
 
 class TestObsidianDecryptor(unittest.TestCase):
     def setUp(self):

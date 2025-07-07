@@ -1,8 +1,8 @@
 import unittest
 import os
 import tempfile
-from obsidian_backup.crypto import CryptoVault
-from obsidian_backup.exceptions import EncryptionError
+from obsidian_backuper.crypto import CryptoVault
+from obsidian_backuper.exceptions import EncryptionError
 
 class TestCryptoVault(unittest.TestCase):
     def setUp(self):
