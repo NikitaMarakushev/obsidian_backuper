@@ -5,6 +5,7 @@ import shutil
 import tarfile
 from obsidian_backuper.core import ObsidianBackuper
 from obsidian_backuper.exceptions import VaultValidationError, ArchiveError, EncryptionError
+from obsidian_backuper.crypto import CryptoVault
 
 class TestObsidianBackuper(unittest.TestCase):
     def setUp(self):

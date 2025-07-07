@@ -4,6 +4,7 @@ import tempfile
 from unittest.mock import patch, MagicMock
 from obsidian_backuper.cli import main, get_env_var
 from obsidian_backuper.exceptions import VaultValidationError, EncryptionError, DecryptionError
+from obsidian_backuper.crypto import CryptoVault
 
 class TestCLI(unittest.TestCase):
     def setUp(self):

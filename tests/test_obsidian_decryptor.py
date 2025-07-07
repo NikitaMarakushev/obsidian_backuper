@@ -3,6 +3,7 @@ import os
 import tempfile
 from obsidian_backuper.obsidian_decryptor import ObsidianDecryptor
 from obsidian_backuper.exceptions import ArchiveError, DecryptionError
+from obsidian_backuper.crypto import CryptoVault
 
 class TestObsidianDecryptor(unittest.TestCase):
     def setUp(self):
