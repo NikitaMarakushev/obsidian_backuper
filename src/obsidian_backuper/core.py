@@ -17,13 +17,15 @@ from .crypto import CryptoVault
 logger = logging.getLogger(__name__)
 
 class ObsidianBackuper:
-    def __init__(self, vault_path: str):
-        self.vault_path = self._validate_vault_path(vault_path)
+    def __init__(self, vault_path: str, require_directory: bool = True):
+        self.vault_path = self._validate_vault_path(vault_path, require_directory)
 
-    def _validate_vault_path(self, path: str) -> str:
+    def _validate_vault_path(self, path: str, require_directory: bool = True) -> str:
         expanded_path = os.path.expanduser(path)
         if not os.path.exists(expanded_path):
             raise VaultValidationError(f"Vault or backup file not found at {expanded_path}")
+        if require_directory and not os.path.isdir(expanded_path):
+            raise VaultValidationError(f"Path is not a directory: {expanded_path}")
         return expanded_path
     
     def _validate_backup_file(self, path: str) -> str:

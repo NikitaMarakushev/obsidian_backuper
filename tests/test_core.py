@@ -26,21 +26,27 @@ class TestObsidianBackuper(unittest.TestCase):
         shutil.rmtree(self.test_dir)
 
     def test_validate_vault_path(self):
-        # Valid vault
         backuper = ObsidianBackuper(self.vault_dir)
         self.assertEqual(backuper.vault_path, self.vault_dir)
         
-        # Non-existent vault
         with self.assertRaises(VaultValidationError):
             ObsidianBackuper(os.path.join(self.test_dir, "nonexistent"))
             
-        # File instead of directory
         test_file = os.path.join(self.test_dir, "test_file.txt")
         with open(test_file, "w") as f:
             f.write("test")
         with self.assertRaises(VaultValidationError):
             ObsidianBackuper(test_file)
         os.unlink(test_file)
+        
+        test_file = os.path.join(self.test_dir, "test_file.txt")
+        with open(test_file, "w") as f:
+            f.write("test")
+        try:
+            backuper = ObsidianBackuper(test_file, require_directory=False)
+            self.assertEqual(backuper.vault_path, test_file)
+        finally:
+            os.unlink(test_file)
 
     def test_create_backup_unencrypted(self):
         backuper = ObsidianBackuper(self.vault_dir)
@@ -106,8 +112,8 @@ class TestObsidianBackuper(unittest.TestCase):
         backuper = ObsidianBackuper(self.vault_dir)
         encrypted_path = backuper.create_backup(encrypt=True, password=password)
         
-        file_backuper = ObsidianBackuper(encrypted_path)
-        with self.assertRaises(ArchiveError):
+        file_backuper = ObsidianBackuper(encrypted_path, require_directory=False)
+        with self.assertRaises(EncryptionError):
             file_backuper.decrypt_backup(password=wrong_password)
         
         os.unlink(encrypted_path)
