@@ -96,7 +96,7 @@ class TestObsidianBackuper(unittest.TestCase):
         
         self.assertTrue(os.path.exists(encrypted_path))
         
-        file_backuper = ObsidianBackuper(encrypted_path)
+        file_backuper = ObsidianBackuper(encrypted_path, require_directory=False)
         decrypted_path = file_backuper.decrypt_backup(password=password)
     
         self.assertTrue(os.path.exists(decrypted_path))
