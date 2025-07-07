@@ -11,5 +11,3 @@ jobs:
       - run: pip install -e .
       - run: pip install pytest pytest-cov
       - run: python -m pytest tests/
-      - run: pip install coverage-badge
-      - run: coverage-badge -o coverage.svg
