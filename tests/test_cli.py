@@ -36,7 +36,7 @@ class TestCLI(unittest.TestCase):
         self.assertIsNone(get_env_var("NON_EXISTENT_VAR"))
         self.assertEqual(get_env_var("NON_EXISTENT_VAR", "default"), "default")
 
-    @patch('obsidian_backup.cli.argparse.ArgumentParser.parse_args')
+    @patch('obsidian_backuper.cli.argparse.ArgumentParser.parse_args')
     def test_cli_encrypt(self, mock_parse_args):
         mock_args = MagicMock()
         mock_args.vault = self.vault_dir
@@ -45,7 +45,7 @@ class TestCLI(unittest.TestCase):
         mock_args.decrypt = False
         mock_parse_args.return_value = mock_args
         
-        with patch('obsidian_backup.cli.ObsidianBackuper') as mock_backuper:
+        with patch('obsidian_backuper.cli.ObsidianBackuper') as mock_backuper:
             instance = mock_backuper.return_value
             instance.create_backup.return_value = "/path/to/backup.tar.gz.enc"
             
@@ -54,7 +54,7 @@ class TestCLI(unittest.TestCase):
             mock_backuper.assert_called_once_with(self.vault_dir)
             instance.create_backup.assert_called_once_with(encrypt=True, password="testpassword")
 
-    @patch('obsidian_backup.cli.argparse.ArgumentParser.parse_args')
+    @patch('obsidian_backuper.cli.argparse.ArgumentParser.parse_args')
     def test_cli_decrypt(self, mock_parse_args):
         mock_args = MagicMock()
         mock_args.vault = self.encrypted_file
@@ -63,7 +63,7 @@ class TestCLI(unittest.TestCase):
         mock_args.decrypt = True
         mock_parse_args.return_value = mock_args
         
-        with patch('obsidian_backup.cli.ObsidianDecryptor') as mock_decryptor:
+        with patch('obsidian_backuper.cli.ObsidianDecryptor') as mock_decryptor:
             instance = mock_decryptor.return_value
             instance.decrypt.return_value = "/path/to/decrypted_file"
             
@@ -72,7 +72,7 @@ class TestCLI(unittest.TestCase):
             mock_decryptor.assert_called_once_with(self.encrypted_file)
             instance.decrypt.assert_called_once_with(password="testpassword", output_dir=None)
 
-    @patch('obsidian_backup.cli.argparse.ArgumentParser.parse_args')
+    @patch('obsidian_backuper.cli.argparse.ArgumentParser.parse_args')
     def test_cli_errors(self, mock_parse_args):
         mock_args = MagicMock()
         mock_args.vault = "/nonexistent/path"

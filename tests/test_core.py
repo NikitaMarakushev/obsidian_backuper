@@ -3,8 +3,8 @@ import os
 import tempfile
 import shutil
 import tarfile
-from obsidian_backup.core import ObsidianBackuper
-from obsidian_backup.exceptions import VaultValidationError, ArchiveError, EncryptionError
+from obsidian_backuper.core import ObsidianBackuper
+from obsidian_backuper.exceptions import VaultValidationError, ArchiveError, EncryptionError
 
 class TestObsidianBackuper(unittest.TestCase):
     def setUp(self):
