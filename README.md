@@ -1,4 +1,5 @@
 ![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
+[![codecov](https://codecov.io/gh/NikitaMarakushev/obsidian_backuper/branch/main/graph/badge.svg)](https://codecov.io/gh/NikitaMarakushev/obsidian_backuper)
 
 Simple cli tool for obsidian vault backup
 
