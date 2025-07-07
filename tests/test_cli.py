@@ -53,7 +53,7 @@ class TestCLI(unittest.TestCase):
             
             main()
             
-            mock_backuper.assert_called_once_with(self.vault_dir)
+            mock_backuper.assert_called_once_with(vault_path=self.vault_dir)
             instance.create_backup.assert_called_once_with(encrypt=True, password="testpassword")
 
     @patch('obsidian_backuper.cli.argparse.ArgumentParser.parse_args')
@@ -71,7 +71,7 @@ class TestCLI(unittest.TestCase):
             
             main()
             
-            mock_decryptor.assert_called_once_with(self.encrypted_file)
+            mock_decryptor.assert_called_once_with(encrypted_file_path=self.encrypted_file)
             instance.decrypt.assert_called_once_with(password="testpassword", output_dir=None)
 
     @patch('obsidian_backuper.cli.argparse.ArgumentParser.parse_args')

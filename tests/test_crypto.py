@@ -57,8 +57,30 @@ class TestCryptoVault(unittest.TestCase):
         crypto.encrypt_file(self.test_file.name, self.encrypted_file)
         
         # Corrupt the file
-        with open(self.encrypted_file, 'ab') as f:
-            f.write(b"corrupt")
+        with open(self.encrypted_file, 'wb') as f:
+            f.write(b"corrupted_data")
             
+        with self.assertRaises(EncryptionError):
+            crypto.decrypt_file(self.encrypted_file, self.decrypted_file)
+    
+    def test_decrypt_corrupted_salt(self):
+        crypto = CryptoVault(self.password)
+        crypto.encrypt_file(self.test_file.name, self.encrypted_file)
+        
+        with open(self.encrypted_file, 'r+b') as f:
+            f.seek(5)
+            f.write(b"xxxxx")
+        
+        with self.assertRaises(EncryptionError):
+            crypto.decrypt_file(self.encrypted_file, self.decrypted_file)
+
+    def test_decrypt_corrupted_data(self):
+        crypto = CryptoVault(self.password)
+        crypto.encrypt_file(self.test_file.name, self.encrypted_file)
+        
+        with open(self.encrypted_file, 'r+b') as f:
+            f.seek(20)
+            f.write(b"xxxxx")
+        
         with self.assertRaises(EncryptionError):
             crypto.decrypt_file(self.encrypted_file, self.decrypted_file)

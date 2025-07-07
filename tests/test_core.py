@@ -85,16 +85,15 @@ class TestObsidianBackuper(unittest.TestCase):
     def test_decrypt_backup(self):
         password = "testpassword123"
         
-        # First create an encrypted backup
         backuper = ObsidianBackuper(self.vault_dir)
         encrypted_path = backuper.create_backup(encrypt=True, password=password)
         
-        # Now test decrypting it
-        decrypted_path = backuper.decrypt_backup(password=password)
+        file_backuper = ObsidianBackuper(encrypted_path)
+        decrypted_path = file_backuper.decrypt_backup(password=password)
+    
         self.assertTrue(os.path.exists(decrypted_path))
         self.assertTrue(decrypted_path.endswith(".tar.gz"))
         
-        # Clean up
         os.unlink(encrypted_path)
         os.unlink(decrypted_path)
 
@@ -105,7 +104,8 @@ class TestObsidianBackuper(unittest.TestCase):
         backuper = ObsidianBackuper(self.vault_dir)
         encrypted_path = backuper.create_backup(encrypt=True, password=password)
         
+        file_backuper = ObsidianBackuper(encrypted_path)
         with self.assertRaises(ArchiveError):
-            backuper.decrypt_backup(password=wrong_password)
+            file_backuper.decrypt_backup(password=wrong_password)
         
         os.unlink(encrypted_path)
