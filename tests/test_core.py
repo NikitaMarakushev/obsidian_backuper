@@ -88,6 +88,8 @@ class TestObsidianBackuper(unittest.TestCase):
         backuper = ObsidianBackuper(self.vault_dir)
         encrypted_path = backuper.create_backup(encrypt=True, password=password)
         
+        self.assertTrue(os.path.exists(encrypted_path))
+        
         file_backuper = ObsidianBackuper(encrypted_path)
         decrypted_path = file_backuper.decrypt_backup(password=password)
     

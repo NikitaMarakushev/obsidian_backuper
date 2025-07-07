@@ -23,10 +23,13 @@ class ObsidianBackuper:
     def _validate_vault_path(self, path: str) -> str:
         expanded_path = os.path.expanduser(path)
         if not os.path.exists(expanded_path):
-            raise VaultValidationError(f"Vault not found at {expanded_path}")
-        if not os.path.isdir(expanded_path):
-            raise VaultValidationError(f"Path is not a directory: {expanded_path}")
+            raise VaultValidationError(f"Vault or backup file not found at {expanded_path}")
         return expanded_path
+    
+    def _validate_backup_file(self, path: str) -> str:
+        if not os.path.isfile(path):
+            raise ArchiveError(f"Backup path is not a file: {path}")
+        return path
 
     def create_backup(self, encrypt: bool = False, password: Optional[str] = None) -> str:
         try:
@@ -75,13 +78,13 @@ class ObsidianBackuper:
                 raise
             raise ArchiveError(f"Unexpected backup error: {str(e)}")
 
-    def decrypt_backup(self, output_dir: str = None, password: Optional[str] = None) -> str:        
+    def decrypt_backup(self, output_dir: str = None, password: Optional[str] = None) -> str:
         if not os.path.exists(self.vault_path):
             raise ArchiveError(f"Backup file not found: {self.vault_path}")
         if not os.path.isfile(self.vault_path):
             raise ArchiveError(f"Path is not a file: {self.vault_path}")
-
-        logger.info(f"Starting decryption of: {self.vault_path}")
+        if not password:
+            raise EncryptionError("Password required for decryption")
 
         if output_dir is None:
             output_dir = os.path.dirname(os.path.abspath(self.vault_path))

@@ -72,7 +72,7 @@ class TestCLI(unittest.TestCase):
             main()
             
             mock_decryptor.assert_called_once_with(encrypted_file_path=self.encrypted_file)
-            instance.decrypt.assert_called_once_with(password="testpassword", output_dir=None)
+            instance.decrypt.assert_called_once_with(password="testpassword")
 
     @patch('obsidian_backuper.cli.argparse.ArgumentParser.parse_args')
     def test_cli_errors(self, mock_parse_args):
