@@ -41,7 +41,7 @@ Simple cli tool for obsidian vault backup
 ```obsidian-backup --vault ~/path_to_folder_with_vault --decrypt --password "secret"```
 
 ### Uninstall:
-```pip uninstall obsidian_backup```
+```pip uninstall obsidian_backuper```
 
 Alternative:
 1) Run to venv setup:
