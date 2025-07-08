@@ -1,4 +1,5 @@
 ![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
+[![Coverage Status](https://coveralls.io/repos/github//NikitaMarakushev/obsidian_backuper/badge.svg)](https://coveralls.io/github/NikitaMarakushev/obsidian_backuper)
 
 Simple cli tool for obsidian vault backup
 
@@ -32,7 +33,7 @@ Simple cli tool for obsidian vault backup
 ```python -m build```
 
 ### Install:
-```pip install dist/obsidian_backuper-1.0.0-py3-none-any.whl```
+```pip install dist/obsidian_backuper-1.0.1-py3-none-any.whl```
 
 ### Cli run encrypt:
 ```obsidian-backup --vault ~/my_vault --encrypt --password "secret"```

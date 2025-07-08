@@ -5,12 +5,12 @@ from obsidian_backuper.obsidian_decryptor import ObsidianDecryptor
 from obsidian_backuper.exceptions import ArchiveError, DecryptionError
 from obsidian_backuper.crypto import CryptoVault
 
+
 class TestObsidianDecryptor(unittest.TestCase):
     def setUp(self):
         self.password = "testpassword"
         self.test_data = b"Test data for decryption"
         
-        # Create encrypted file
         self.encrypted_file = tempfile.NamedTemporaryFile(suffix='.enc', delete=False).name
         self.crypto = CryptoVault(self.password)
         self.test_file = tempfile.NamedTemporaryFile(delete=False)
@@ -24,19 +24,15 @@ class TestObsidianDecryptor(unittest.TestCase):
                 os.unlink(f)
 
     def test_validate_encrypted_file(self):
-        # Valid file
         decryptor = ObsidianDecryptor(self.encrypted_file)
         self.assertEqual(decryptor.encrypted_file_path, self.encrypted_file)
         
-        # Non-existent file
         with self.assertRaises(ArchiveError):
             ObsidianDecryptor("/nonexistent/file.enc")
             
-        # Directory instead of file
         with self.assertRaises(ArchiveError):
             ObsidianDecryptor(os.path.dirname(self.encrypted_file))
             
-        # Wrong extension
         wrong_ext = tempfile.NamedTemporaryFile(suffix='.txt', delete=False).name
         with self.assertRaises(ArchiveError):
             ObsidianDecryptor(wrong_ext)

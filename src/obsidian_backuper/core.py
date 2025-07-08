@@ -9,8 +9,7 @@ from .exceptions import (
     VaultValidationError,
     EncryptionError,
     ArchiveError,
-    ObsidianBackupError,
-    DecryptionError
+    ObsidianBackupError
 )
 from .crypto import CryptoVault
 

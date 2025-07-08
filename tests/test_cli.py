@@ -7,17 +7,16 @@ from obsidian_backuper.cli import main, get_env_var
 from obsidian_backuper.exceptions import VaultValidationError, EncryptionError, DecryptionError
 from obsidian_backuper.crypto import CryptoVault
 
+
 class TestCLI(unittest.TestCase):
     def setUp(self):
         self.test_dir = tempfile.mkdtemp()
         self.vault_dir = os.path.join(self.test_dir, "test_vault")
         os.makedirs(self.vault_dir)
         
-        # Create a test file in the vault
         with open(os.path.join(self.vault_dir, "test_note.md"), "w") as f:
             f.write("# Test Note")
         
-        # Create an encrypted file for decryption tests
         self.encrypted_file = os.path.join(self.test_dir, "test.enc")
         crypto = CryptoVault("testpassword")
         test_file = os.path.join(self.test_dir, "test.txt")
@@ -30,11 +29,9 @@ class TestCLI(unittest.TestCase):
         shutil.rmtree(self.test_dir)
 
     def test_get_env_var(self):
-        # Test with existing environment variable
         os.environ["TEST_VAR"] = "test_value"
         self.assertEqual(get_env_var("TEST_VAR"), "test_value")
         
-        # Test with non-existing variable
         self.assertIsNone(get_env_var("NON_EXISTENT_VAR"))
         self.assertEqual(get_env_var("NON_EXISTENT_VAR", "default"), "default")
 

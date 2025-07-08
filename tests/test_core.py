@@ -7,14 +7,13 @@ from obsidian_backuper.core import ObsidianBackuper
 from obsidian_backuper.exceptions import VaultValidationError, ArchiveError, EncryptionError
 from obsidian_backuper.crypto import CryptoVault
 
+
 class TestObsidianBackuper(unittest.TestCase):
     def setUp(self):
-        # Create a test vault structure
         self.test_dir = tempfile.mkdtemp()
         self.vault_dir = os.path.join(self.test_dir, "test_vault")
         os.makedirs(self.vault_dir)
         
-        # Create some test files in the vault
         with open(os.path.join(self.vault_dir, "test_note.md"), "w") as f:
             f.write("# Test Note\n\nThis is a test note.")
         
@@ -55,7 +54,6 @@ class TestObsidianBackuper(unittest.TestCase):
         self.assertTrue(os.path.exists(backup_path))
         self.assertTrue(backup_path.endswith(".tar.gz"))
         
-        # Verify tar contents
         with tarfile.open(backup_path, "r:gz") as tar:
             members = tar.getmembers()
             self.assertTrue(any(m.name == "test_vault/test_note.md" for m in members))
@@ -71,7 +69,6 @@ class TestObsidianBackuper(unittest.TestCase):
         self.assertTrue(os.path.exists(backup_path))
         self.assertTrue(backup_path.endswith(".tar.gz.enc"))
         
-        # Verify we can decrypt it
         crypto = CryptoVault(password)
         decrypted_path = backup_path[:-4]  # remove .enc
         crypto.decrypt_file(backup_path, decrypted_path)
