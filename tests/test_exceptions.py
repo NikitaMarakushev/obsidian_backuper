@@ -8,6 +8,7 @@ from obsidian_backuper.exceptions import (
     DecryptionError
 )
 
+
 class TestExceptions(unittest.TestCase):
     def test_exception_hierarchy(self):
         self.assertTrue(issubclass(VaultValidationError, ObsidianBackupError))

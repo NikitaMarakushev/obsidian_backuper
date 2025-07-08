@@ -4,6 +4,7 @@ import tempfile
 from obsidian_backuper.crypto import CryptoVault
 from obsidian_backuper.exceptions import EncryptionError
 
+
 class TestCryptoVault(unittest.TestCase):
     def setUp(self):
         self.password = "securepassword123"
@@ -25,17 +26,15 @@ class TestCryptoVault(unittest.TestCase):
 
     def test_key_derivation(self):
         crypto = CryptoVault(self.password)
-        self.assertEqual(len(crypto.key), 44)  # Fernet key is 32 bytes, base64 encoded
+        self.assertEqual(len(crypto.key), 44)
 
     def test_encrypt_decrypt_file(self):
         crypto = CryptoVault(self.password)
         
-        # Encrypt
         crypto.encrypt_file(self.test_file.name, self.encrypted_file)
         self.assertTrue(os.path.exists(self.encrypted_file))
         self.assertGreater(os.path.getsize(self.encrypted_file), 0)
         
-        # Decrypt
         crypto.decrypt_file(self.encrypted_file, self.decrypted_file)
         self.assertTrue(os.path.exists(self.decrypted_file))
         
@@ -56,7 +55,6 @@ class TestCryptoVault(unittest.TestCase):
         crypto = CryptoVault(self.password)
         crypto.encrypt_file(self.test_file.name, self.encrypted_file)
         
-        # Corrupt the file
         with open(self.encrypted_file, 'wb') as f:
             f.write(b"corrupted_data")
             

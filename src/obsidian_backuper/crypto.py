@@ -1,6 +1,5 @@
 import os
 import base64
-from typing import Optional
 from cryptography.fernet import Fernet, InvalidToken
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 from cryptography.hazmat.primitives import hashes
@@ -61,7 +60,7 @@ class CryptoVault:
             kdf = PBKDF2HMAC(
                 algorithm=hashes.SHA256(),
                 length=LENGTH,
-                salt=salt,  # Use the salt from the file
+                salt=salt,
                 iterations=ITERATIONS,
                 backend=default_backend()
             )
