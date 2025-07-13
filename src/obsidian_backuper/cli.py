@@ -4,6 +4,7 @@ import dotenv
 import logging
 from typing import Optional
 from .core import ObsidianBackuper
+from .tui import run_tui
 from .exceptions import (
     ObsidianBackupError,
     VaultValidationError,
@@ -43,7 +44,12 @@ def main():
     args = parser.parse_args()
 
     try:
-        if args.encrypt:
+        if args.tui:
+            run_tui()
+        elif args.encrypt:
+            if not args.vault or not args.password:
+                parser.error("--vault and --password are required for encryption")
+
             if not os.path.isdir(os.path.expanduser(args.vault)):
                 logging.error(f"Vault path must be a directory for encryption: {args.vault}")
                 exit(1)
@@ -56,9 +62,14 @@ def main():
             logging.info(f"Encrypted backup created at: {backup_path}")
 
         elif args.decrypt:
+            if not args.vault or not args.password:
+                parser.error("--vault and --password are required for decryption")
+
             decryptor = ObsidianDecryptor(encrypted_file_path=args.vault)
             decrypted_path = decryptor.decrypt(password=args.password)
             logging.info(f"File decrypted to: {decrypted_path}")
+        else:
+            parser.print_help()
 
     except VaultValidationError as e:
         logging.error(f"Vault error: {str(e)}")

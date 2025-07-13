@@ -1,0 +1,47 @@
+Screen {
+    align: center middle;
+}
+
+#main-container {
+    width: 80%;
+    max-width: 800px;
+    padding: 1;
+    border: round $primary;
+}
+
+#title {
+    text-align: center;
+    width: 100%;
+    margin-bottom: 2;
+    text-style: bold;
+}
+
+.input-label {
+    margin-top: 1;
+}
+
+#buttons {
+    height: auto;
+    margin: 2 0;
+    align: center middle;
+}
+
+Button {
+    width: auto;
+    min-width: 15;
+    margin: 0 1;
+}
+
+#operation-complete {
+    width: 100%;
+    margin: 1 0;
+    padding: 1;
+    border: round $success;
+    background: $boost;
+    color: $text;
+}
+
+#progress {
+    width: 100%;
+    margin: 1 0;
+}
