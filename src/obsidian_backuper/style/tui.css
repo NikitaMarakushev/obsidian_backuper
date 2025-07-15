@@ -4,7 +4,7 @@ Screen {
 
 #main-container {
     width: 80%;
-    max-width: 800px;
+    max-width: 80w;
     padding: 1;
     border: round $primary;
 }

@@ -53,7 +53,6 @@ Alternative:
 
 exit venv: ```deactivate```
 
-Uninstall packege: ```pip uninstall obsidian-backuper```
+Uninstall packege: ```pip uninstall obsidian-backuper -y```
 
-Run with tui:
-```obsidian-backup --tui```
+Run with tui: ```obsidian-backup --tui```
