@@ -13,6 +13,7 @@ from .exceptions import (
 )
 from .obsidian_decryptor import ObsidianDecryptor
 
+
 def setup_logging():
     logging.basicConfig(
         level=logging.INFO,
@@ -23,23 +24,26 @@ def setup_logging():
         ]
     )
 
+
 def get_env_var(name: str, default: Optional[str] = None) -> Optional[str]:
     value = os.getenv(name, default)
     if value is None:
         logging.warning(f"Environment variable {name} not set")
     return value
 
+
 def main():
     setup_logging()
     dotenv.load_dotenv()
 
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--vault", required=True, help="Path to vault directory (for encrypt) or to encrypted archive (for decrypt)")
-    parser.add_argument("--password", required=True, help="Encryption/decryption password")
+    parser = argparse.ArgumentParser(description="Obsidian Backup Tool")
+    parser.add_argument("--vault", help="Path to vault directory (for encrypt) or to encrypted archive (for decrypt)")
+    parser.add_argument("--password", help="Encryption/decryption password")
 
-    group = parser.add_mutually_exclusive_group(required=True)
+    group = parser.add_mutually_exclusive_group()
     group.add_argument("--encrypt", action="store_true", help="Create and encrypt backup")
     group.add_argument("--decrypt", action="store_true", help="Decrypt backup archive")
+    group.add_argument("--tui", action="store_true", help="Launch Textual User Interface")
 
     args = parser.parse_args()
 
@@ -86,6 +90,7 @@ def main():
     except Exception as e:
         logging.error(f"Unexpected error: {str(e)}", exc_info=True)
         exit(1)
+
 
 if __name__ == "__main__":
     main()
