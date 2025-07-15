@@ -40,8 +40,8 @@ class ObsidianBackupTUI(App):
                     Button("Decrypt Backup", variant="warning", id="decrypt"),
                     id="buttons"
                 ),
-                ProgressBar(show_eta=False, id="progress", visible=False),
-                OperationComplete("", id="operation-complete", visible=False),
+                ProgressBar(show_eta=False, id="progress"),
+                OperationComplete("", id="operation-complete"),
                 id="main-container"
             )
         )
@@ -51,6 +51,8 @@ class ObsidianBackupTUI(App):
         """Called when app starts."""
         self.title = "Obsidian Backup Tool"
         self.sub_title = "Python 3.12"
+        self.query_one("#progress").display = False
+        self.query_one("#operation-complete").display = False
 
     @on(Button.Pressed, "#encrypt")
     def handle_encrypt(self) -> None:
@@ -61,6 +63,7 @@ class ObsidianBackupTUI(App):
     def handle_decrypt(self) -> None:
         """Handle decrypt button press."""
         self.run_backup_operation(encrypt=False)
+
 
     @work(thread=True)
     def run_backup_operation(self, encrypt: bool) -> None:
@@ -76,7 +79,6 @@ class ObsidianBackupTUI(App):
             self.notify("Password is required!", severity="error")
             return
 
-        # Update UI for operation start
         self.call_from_thread(
             self.update_ui_for_operation_start,
             f"{'Encrypting' if encrypt else 'Decrypting'}..."
@@ -114,9 +116,10 @@ class ObsidianBackupTUI(App):
 
     def update_ui_for_operation_start(self, message: str) -> None:
         """Update UI when operation starts."""
-        self.query_one("#progress", ProgressBar).visible = True
-        self.query_one("#progress", ProgressBar).update(total=100, progress=0)
-        self.query_one("#operation-complete", OperationComplete).visible = False
+        progress = self.query_one("#progress", ProgressBar)
+        progress.update(total=100, progress=0)
+        progress.display = True
+        self.query_one("#operation-complete", OperationComplete).display = False
         self.query_one("#buttons", Horizontal).disabled = True
         self.notify(message)
 
@@ -124,12 +127,12 @@ class ObsidianBackupTUI(App):
         """Update UI when operation succeeds."""
         operation_complete = self.query_one("#operation-complete", OperationComplete)
         operation_complete.update(message)
-        operation_complete.visible = True
+        operation_complete.display = True
         self.notify("Operation completed successfully!", severity="success")
 
     def update_ui_for_operation_end(self) -> None:
         """Update UI when operation ends (success or failure)."""
-        self.query_one("#progress", ProgressBar).visible = False
+        self.query_one("#progress", ProgressBar).display = False
         self.query_one("#buttons", Horizontal).disabled = False
 
 
