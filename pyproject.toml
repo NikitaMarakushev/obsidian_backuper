@@ -26,5 +26,8 @@ dev = [
 requires = ["setuptools>=65.0.0"]
 build-backend = "setuptools.build_meta"
 
+[tool.setuptools.package-data]
+obsidian_backuper = ["tui.css"]
+
 [project.scripts]
 obsidian-backup = "obsidian_backuper.cli:main"

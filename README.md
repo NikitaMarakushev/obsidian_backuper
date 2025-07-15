@@ -53,4 +53,10 @@ Alternative:
 
 exit venv: ```deactivate```
 
-Uninstall packege: ```pip uninstall obsidian-backuper```
+Uninstall packege: ```pip uninstall obsidian-backuper -y```
+
+Run with tui: ```obsidian-backup --tui```
+
+![img.png](media/img.png)
+![img_1.png](media/img_1.png)
+![img3.png](media/img3.png)
