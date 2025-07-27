@@ -4,10 +4,10 @@
 
 Simple cli tool for obsidian vault backup
 
-### Install
-1. `git clone https://github.com/NikitaMarakushev/obsidian_backuper`
+### Install: ```git clone https://github.com/NikitaMarakushev/obsidian_backuper```
 
 ### Set up your .env file
+![img4.png](media/img4.png)
 
 ### Run tests:
 ```pytest tests/ -v```
